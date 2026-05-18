@@ -1,6 +1,15 @@
-import { getPosts, type Post } from "@/services/api/post";
+import {
+  createPost,
+  getPosts,
+  getPostsByUserId,
+  type Post,
+} from "@/services/api/post";
 import { queryKeys } from "@/queries/query-keys";
-import { type UseQueryOptions } from "@tanstack/react-query";
+import {
+  useMutation,
+  useQueryClient,
+  type UseQueryOptions,
+} from "@tanstack/react-query";
 
 export type { Post };
 
@@ -23,4 +32,29 @@ export function createPostsQueryOptions(
     ...DEFAULT_QUERY_OPTIONS,
     ...(options ?? {}),
   };
+}
+
+export function createPostsByUserQueryOptions(
+  userId: number,
+  options?: Omit<
+    UseQueryOptions<Post[], Error, Post[], readonly unknown[]>,
+    "queryKey" | "queryFn"
+  >,
+) {
+  return {
+    queryKey: queryKeys.posts.byUser(userId),
+    queryFn: () => getPostsByUserId(userId),
+    ...DEFAULT_QUERY_OPTIONS,
+    ...(options ?? {}),
+  };
+}
+
+export function useCreatePost() {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: createPost,
+    onSuccess: () =>
+      void queryClient.invalidateQueries({ queryKey: queryKeys.posts.all }),
+  });
 }

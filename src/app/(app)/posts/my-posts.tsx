@@ -1,6 +1,7 @@
-import { createPostsQueryOptions } from "@/queries/post";
+import { createPostsByUserQueryOptions } from "@/queries/post";
 import { useQuery } from "@tanstack/react-query";
-import { useRouter } from "expo-router";
+import { useLocalSearchParams } from "expo-router";
+import { useMemo } from "react";
 import {
   ActivityIndicator,
   FlatList,
@@ -10,16 +11,29 @@ import {
 } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 
-export default function PostsScreen() {
-  const router = useRouter();
+function parseUserIdParam(raw: string | string[] | undefined) {
+  const value = Array.isArray(raw) ? raw[0] : raw;
+  const n = value != null ? Number(value) : NaN;
+  if (!Number.isFinite(n) || n <= 0) return null;
+  return Math.trunc(n);
+}
+
+export default function MyPostsScreen() {
+  const params = useLocalSearchParams<{ userId?: string | string[] }>();
+
+  const userId = useMemo(
+    () => parseUserIdParam(params.userId) ?? 1,
+    [params.userId],
+  );
+
   const { data, isPending, isError, error, refetch, isFetching } = useQuery(
-    createPostsQueryOptions(),
+    createPostsByUserQueryOptions(userId),
   );
 
   return (
     <SafeAreaView
       className="flex-1 bg-slate-50"
-      edges={["top", "left", "right"]}
+      edges={["left", "right"]}
     >
       {isPending ? (
         <View className="flex-1 items-center justify-center">
@@ -47,6 +61,11 @@ export default function PostsScreen() {
           contentContainerClassName="px-4 py-4 pb-8"
           refreshing={isFetching && !isPending}
           onRefresh={() => void refetch()}
+          ListHeaderComponent={
+            <Text className="mb-3 text-sm font-medium text-slate-500">
+              Posts for user #{userId}
+            </Text>
+          }
           renderItem={({ item }) => (
             <View className="mb-3 rounded-xl border border-slate-200 bg-white p-4 shadow-sm">
               <Text className="mb-1 text-xs font-medium uppercase text-slate-400">
@@ -65,7 +84,7 @@ export default function PostsScreen() {
           )}
           ListEmptyComponent={
             <Text className="py-8 text-center text-slate-500">
-              No posts found.
+              No posts for this user.
             </Text>
           }
         />
