@@ -1,3 +1,4 @@
+import { Card } from "@/components/card";
 import { createPostsByUserQueryOptions } from "@/queries/post";
 import { useQuery } from "@tanstack/react-query";
 import { useLocalSearchParams } from "expo-router";
@@ -67,7 +68,7 @@ export default function MyPostsScreen() {
             </Text>
           }
           renderItem={({ item }) => (
-            <View className="mb-3 rounded-xl border border-slate-200 bg-white p-4 shadow-sm">
+            <Card className="mb-3">
               <Text className="mb-1 text-xs font-medium uppercase text-slate-400">
                 Post #{item.id}
               </Text>
@@ -80,7 +81,7 @@ export default function MyPostsScreen() {
               >
                 {item.body}
               </Text>
-            </View>
+            </Card>
           )}
           ListEmptyComponent={
             <Text className="py-8 text-center text-slate-500">

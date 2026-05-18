@@ -1,3 +1,4 @@
+import { Card } from "@/components/card";
 import { createPostsQueryOptions } from "@/queries/post";
 import Ionicons from "@expo/vector-icons/Ionicons";
 import { useQuery } from "@tanstack/react-query";
@@ -50,7 +51,7 @@ export default function PostsScreen() {
             refreshing={isFetching && !isPending}
             onRefresh={() => void refetch()}
             renderItem={({ item }) => (
-              <View className="mb-3 rounded-xl border border-slate-200 bg-white p-4 shadow-sm">
+              <Card className="mb-3">
                 <Text className="mb-1 text-xs font-medium uppercase text-slate-400">
                   Post #{item.id}
                 </Text>
@@ -63,7 +64,7 @@ export default function PostsScreen() {
                 >
                   {item.body}
                 </Text>
-              </View>
+              </Card>
             )}
             ListEmptyComponent={
               <Text className="py-8 text-center text-slate-500">

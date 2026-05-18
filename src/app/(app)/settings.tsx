@@ -1,3 +1,4 @@
+import { Card } from "@/components/card";
 import { useSession } from "@/providers/session-provider";
 import { useRouter } from "expo-router";
 import { Pressable, Text, View } from "react-native";
@@ -13,14 +14,14 @@ export default function SettingsScreen() {
       edges={["bottom", "left", "right"]}
     >
       <View className="flex-1 px-4 pt-4">
-        <View className="mb-8 rounded-xl border border-slate-200 bg-white p-4 shadow-sm">
+        <Card className="mb-8">
           <Text className="text-xs font-semibold uppercase text-slate-400">
             Signed in as
           </Text>
           <Text className="mt-2 text-lg font-semibold text-slate-900">
             {userEmail ?? "Unknown"}
           </Text>
-        </View>
+        </Card>
 
         <Pressable
           onPress={() => {
