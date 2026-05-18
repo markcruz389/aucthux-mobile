@@ -1,4 +1,5 @@
 import { Card } from "@/components/card";
+import { useSession } from "@/providers/session-provider";
 import { createPostsByUserQueryOptions } from "@/queries/post";
 import { useQuery } from "@tanstack/react-query";
 import { useLocalSearchParams } from "expo-router";
@@ -21,10 +22,11 @@ function parseUserIdParam(raw: string | string[] | undefined) {
 
 export default function MyPostsScreen() {
   const params = useLocalSearchParams<{ userId?: string | string[] }>();
+  const { userId: sessionUserId } = useSession();
 
   const userId = useMemo(
-    () => parseUserIdParam(params.userId) ?? 1,
-    [params.userId],
+    () => parseUserIdParam(params.userId) ?? sessionUserId ?? 1,
+    [params.userId, sessionUserId],
   );
 
   const { data, isPending, isError, error, refetch, isFetching } = useQuery(
@@ -32,10 +34,7 @@ export default function MyPostsScreen() {
   );
 
   return (
-    <SafeAreaView
-      className="flex-1 bg-slate-50"
-      edges={["left", "right"]}
-    >
+    <SafeAreaView className="flex-1 bg-slate-50" edges={["left", "right"]}>
       {isPending ? (
         <View className="flex-1 items-center justify-center">
           <ActivityIndicator size="large" color="#2563eb" />

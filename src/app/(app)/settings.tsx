@@ -6,7 +6,7 @@ import { SafeAreaView } from "react-native-safe-area-context";
 
 export default function SettingsScreen() {
   const router = useRouter();
-  const { userEmail, signOut } = useSession();
+  const { userEmail, userId, signOut } = useSession();
 
   return (
     <SafeAreaView
@@ -20,6 +20,12 @@ export default function SettingsScreen() {
           </Text>
           <Text className="mt-2 text-lg font-semibold text-slate-900">
             {userEmail ?? "Unknown"}
+          </Text>
+          <Text className="mt-4 text-xs font-semibold uppercase text-slate-400">
+            User ID
+          </Text>
+          <Text className="mt-2 text-lg font-semibold text-slate-900">
+            {userId != null ? String(userId) : "—"}
           </Text>
         </Card>
 

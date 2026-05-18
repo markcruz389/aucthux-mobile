@@ -23,11 +23,6 @@ export const createPostFormSchema = z.object({
     .trim()
     .min(1, "Body is required")
     .max(5000, "Body must be 5000 characters or less"),
-  userId: z
-    .string()
-    .trim()
-    .min(1, "User ID is required")
-    .regex(/^[1-9]\d*$/, "Enter a positive whole number"),
 });
 
 export type CreatePostInput = {

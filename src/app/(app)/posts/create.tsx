@@ -1,4 +1,5 @@
 import { TextField } from "@/components/form/text-field";
+import { useSession } from "@/providers/session-provider";
 import { useCreatePost } from "@/queries/post";
 import { createPostFormSchema } from "@/services/api/post";
 import { firstFieldErrorMessage } from "@/utils/first-error-message";
@@ -17,6 +18,7 @@ import { SafeAreaView } from "react-native-safe-area-context";
 
 export default function CreatePostScreen() {
   const router = useRouter();
+  const { userId } = useSession();
   const createPostMutation = useCreatePost();
   const [submitError, setSubmitError] = useState<string | null>(null);
 
@@ -24,18 +26,21 @@ export default function CreatePostScreen() {
     defaultValues: {
       title: "",
       body: "",
-      userId: "1",
     },
     validators: {
       onSubmit: createPostFormSchema,
     },
     onSubmit: async ({ value }) => {
       setSubmitError(null);
+      if (userId == null) {
+        setSubmitError("Your session is missing a user id. Please sign in again.");
+        return;
+      }
       try {
         await createPostMutation.mutateAsync({
           title: value.title.trim(),
           body: value.body.trim(),
-          userId: Number(value.userId),
+          userId,
         });
         router.back();
       } catch (err) {
@@ -86,19 +91,6 @@ export default function CreatePostScreen() {
                 textAlignVertical="top"
                 containerClassName="mb-4"
                 style={{ minHeight: 120 }}
-              />
-            )}
-          </form.Field>
-
-          <form.Field name="userId">
-            {(field) => (
-              <TextField
-                label="User ID"
-                value={field.state.value}
-                onChangeText={field.handleChange}
-                error={firstFieldErrorMessage(field.state.meta.errors)}
-                placeholder="1"
-                keyboardType="number-pad"
               />
             )}
           </form.Field>
