@@ -1,8 +1,7 @@
 import { Card } from "@/components/card";
+import { CreatePostFab } from "@/components/create-post-fab";
 import { createPostsQueryOptions } from "@/queries/post";
-import Ionicons from "@expo/vector-icons/Ionicons";
 import { useQuery } from "@tanstack/react-query";
-import { router } from "expo-router";
 import {
   ActivityIndicator,
   FlatList,
@@ -10,13 +9,9 @@ import {
   Text,
   View,
 } from "react-native";
-import {
-  SafeAreaView,
-  useSafeAreaInsets,
-} from "react-native-safe-area-context";
+import { SafeAreaView } from "react-native-safe-area-context";
 
 export default function PostsScreen() {
-  const insets = useSafeAreaInsets();
   const { data, isPending, isError, error, refetch, isFetching } = useQuery(
     createPostsQueryOptions(),
   );
@@ -73,15 +68,7 @@ export default function PostsScreen() {
             }
           />
         )}
-        <Pressable
-          onPress={() => router.push("/posts/create")}
-          className="absolute right-4 size-14 items-center justify-center rounded-full bg-blue-600 shadow-lg active:opacity-90"
-          style={{ bottom: insets.bottom + 16 }}
-          accessibilityRole="button"
-          accessibilityLabel="Add post"
-        >
-          <Ionicons name="add" size={28} color="#ffffff" />
-        </Pressable>
+        <CreatePostFab />
       </View>
     </SafeAreaView>
   );

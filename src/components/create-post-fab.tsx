@@ -1,0 +1,22 @@
+import { useBottomTabBarHeight } from "@react-navigation/bottom-tabs";
+import Ionicons from "@expo/vector-icons/Ionicons";
+import { router } from "expo-router";
+import { Pressable } from "react-native";
+
+export function CreatePostFab() {
+  const tabBarHeight = useBottomTabBarHeight();
+
+  return (
+    <Pressable
+      onPress={() => router.push("/posts/create")}
+      className="absolute right-4 size-14 items-center justify-center rounded-full bg-blue-600 shadow-lg active:opacity-90"
+      style={{
+        bottom: tabBarHeight + 16,
+      }}
+      accessibilityRole="button"
+      accessibilityLabel="Add post"
+    >
+      <Ionicons name="add" size={28} color="#ffffff" />
+    </Pressable>
+  );
+}
