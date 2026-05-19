@@ -21,13 +21,13 @@ A cross-platform mobile app built with Expo and React Native. Users can sign in,
    npm install
    ```
 
-3. **(Optional)** Configure the API base URL. By default, requests go to [JSONPlaceholder](https://jsonplaceholder.typicode.com).
+3. Copy `.env-example` to `.env` and set `EXPO_PUBLIC_API_BASE_URL` to your API base URL (include `/api` if your backend uses that prefix). For local development with [JSONPlaceholder](https://jsonplaceholder.typicode.com):
 
    ```bash
-   EXPO_PUBLIC_API_BASE_URL=https://jsonplaceholder.typicode.com
+   cp .env-example .env
    ```
 
-   The app appends `/api` to this value (see `src/lib/axios.ts`). Restart the dev server after changing env vars.
+   Restart the dev server after changing env vars.
 
 4. **(Optional)** Run the linter:
 
