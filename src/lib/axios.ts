@@ -3,10 +3,13 @@ import axios from "axios";
 
 const configuredOrigin = process.env.EXPO_PUBLIC_API_BASE_URL?.trim();
 
-const baseURL =
-  configuredOrigin != null && configuredOrigin !== ""
-    ? `${configuredOrigin.replace(/\/$/, "")}/api`
-    : "https://jsonplaceholder.typicode.com";
+if (!configuredOrigin) {
+  throw new Error(
+    "EXPO_PUBLIC_API_BASE_URL is not set. Copy .env-example to .env and set your API base URL.",
+  );
+}
+
+const baseURL = configuredOrigin.replace(/\/$/, "");
 
 const axiosInstance = axios.create({
   baseURL,
