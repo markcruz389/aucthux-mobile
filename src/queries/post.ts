@@ -1,10 +1,10 @@
+import { queryKeys } from "@/queries/query-keys";
 import {
   createPost,
   getPosts,
   getPostsByUserId,
   type Post,
 } from "@/services/api/post";
-import { queryKeys } from "@/queries/query-keys";
 import {
   useMutation,
   useQueryClient,

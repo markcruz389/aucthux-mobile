@@ -11,16 +11,16 @@ async function secureStoreSupported() {
   }
 }
 
-/** Cryptographically random positive int32-style id for API payloads. */
+/** Random user id in the range 1–10 for API payloads. */
 export function generateRandomUserId() {
   try {
     const array = new Uint32Array(1);
     globalThis.crypto.getRandomValues(array);
     const n = array[0];
     if (n === undefined) throw new Error("missing random value");
-    return (n % 2_147_483_646) + 1;
+    return (n % 10) + 1;
   } catch {
-    return Math.floor(Math.random() * 2_147_483_646) + 1;
+    return Math.floor(Math.random() * 10) + 1;
   }
 }
 

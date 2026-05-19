@@ -9,7 +9,7 @@ export default function PostsLayout() {
         options={{
           headerShown: true,
           title: "New post",
-          headerBackTitle: "Posts",
+          headerBackButtonDisplayMode: "minimal",
         }}
       />
     </Stack>

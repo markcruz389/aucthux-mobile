@@ -1,24 +1,21 @@
 import { Card } from "@/components/card";
-import { CreatePostFab } from "@/components/create-post-fab";
+import { PostSkeletonList } from "@/components/post-skeleton-card";
 import { useSession } from "@/providers/session-provider";
 import { createPostsByUserQueryOptions } from "@/queries/post";
 import { useQuery } from "@tanstack/react-query";
-import {
-  ActivityIndicator,
-  FlatList,
-  Pressable,
-  Text,
-  View,
-} from "react-native";
+import { FlatList, Pressable, Text, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 
 export default function MyPostsScreen() {
   const { userId } = useSession();
 
-  const { data, isPending, isError, error, refetch, isFetching } = useQuery({
+  const { data, isPending, isError, error, refetch, isRefetching } = useQuery({
     ...createPostsByUserQueryOptions(userId ?? 0),
     enabled: userId != null,
   });
+
+  console.log("userId", userId);
+  console.log("isPending", isPending);
 
   return (
     <SafeAreaView className="flex-1 bg-slate-50" edges={["left", "right"]}>
@@ -30,10 +27,7 @@ export default function MyPostsScreen() {
             </Text>
           </View>
         ) : isPending ? (
-          <View className="flex-1 items-center justify-center">
-            <ActivityIndicator size="large" color="#2563eb" />
-            <Text className="mt-3 text-slate-600">Loading posts…</Text>
-          </View>
+          <PostSkeletonList />
         ) : isError ? (
           <View className="flex-1 items-center justify-center px-6">
             <Text className="mb-4 text-center text-base text-red-600">
@@ -53,13 +47,9 @@ export default function MyPostsScreen() {
             data={data}
             keyExtractor={(item) => String(item.id)}
             contentContainerClassName="px-4 py-4 pb-8"
-            refreshing={isFetching && !isPending}
+            contentContainerStyle={{ flexGrow: 1 }}
+            refreshing={isRefetching}
             onRefresh={() => void refetch()}
-            ListHeaderComponent={
-              <Text className="mb-3 text-sm font-medium text-slate-500">
-                Your posts (user #{userId})
-              </Text>
-            }
             renderItem={({ item }) => (
               <Card className="mb-3">
                 <Text className="mb-1 text-xs font-medium uppercase text-slate-400">
@@ -83,7 +73,6 @@ export default function MyPostsScreen() {
             }
           />
         )}
-        <CreatePostFab />
       </View>
     </SafeAreaView>
   );

@@ -1,18 +1,12 @@
 import { Card } from "@/components/card";
-import { CreatePostFab } from "@/components/create-post-fab";
+import { PostSkeletonList } from "@/components/post-skeleton-card";
 import { createPostsQueryOptions } from "@/queries/post";
 import { useQuery } from "@tanstack/react-query";
-import {
-  ActivityIndicator,
-  FlatList,
-  Pressable,
-  Text,
-  View,
-} from "react-native";
+import { FlatList, Pressable, Text, View, ActivityIndicator } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 
 export default function PostsScreen() {
-  const { data, isPending, isError, error, refetch, isFetching } = useQuery(
+  const { data, isPending, isError, error, refetch, isRefetching } = useQuery(
     createPostsQueryOptions(),
   );
 
@@ -20,9 +14,12 @@ export default function PostsScreen() {
     <SafeAreaView className="flex-1 bg-slate-50" edges={["left", "right"]}>
       <View className="flex-1">
         {isPending ? (
-          <View className="flex-1 items-center justify-center">
-            <ActivityIndicator size="large" color="#2563eb" />
-            <Text className="mt-3 text-slate-600">Loading posts…</Text>
+          <View className="flex-1">
+            <View className="items-center py-6">
+              <ActivityIndicator size="large" color="#2563eb" />
+              <Text className="mt-3 text-slate-600">Loading posts…</Text>
+            </View>
+            <PostSkeletonList />
           </View>
         ) : isError ? (
           <View className="flex-1 items-center justify-center px-6">
@@ -43,7 +40,8 @@ export default function PostsScreen() {
             data={data}
             keyExtractor={(item) => String(item.id)}
             contentContainerClassName="px-4 py-4 pb-8"
-            refreshing={isFetching && !isPending}
+            contentContainerStyle={{ flexGrow: 1 }}
+            refreshing={isRefetching}
             onRefresh={() => void refetch()}
             renderItem={({ item }) => (
               <Card className="mb-3">
@@ -68,7 +66,6 @@ export default function PostsScreen() {
             }
           />
         )}
-        <CreatePostFab />
       </View>
     </SafeAreaView>
   );
