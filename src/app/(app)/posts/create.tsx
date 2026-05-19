@@ -43,10 +43,8 @@ export default function CreatePostScreen() {
           userId,
         });
         router.back();
-      } catch (err) {
-        setSubmitError(
-          err instanceof Error ? err.message : "Could not create post",
-        );
+      } catch {
+        // API errors are surfaced via the axios error toast interceptor.
       }
     },
   });

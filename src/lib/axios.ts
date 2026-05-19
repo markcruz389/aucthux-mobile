@@ -1,3 +1,4 @@
+import { showApiErrorToast } from "@/lib/show-api-error-toast";
 import axios from "axios";
 
 const configuredOrigin = process.env.EXPO_PUBLIC_API_BASE_URL?.trim();
@@ -22,7 +23,7 @@ const axiosInstance = axios.create({
 axiosInstance.interceptors.response.use(
   (response) => response, // Pass through successful responses
   async (error) => {
-    // Always return a rejected promise so the calling function can catch it
+    showApiErrorToast(error);
     return Promise.reject(error);
   },
 );
