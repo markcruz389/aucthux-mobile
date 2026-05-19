@@ -62,9 +62,6 @@ export default function SignInScreen() {
             <Text className="mb-8 text-3xl font-bold text-slate-900">
               Sign in
             </Text>
-            <Text className="mb-6 text-base text-slate-600">
-              Use your email and password to continue.
-            </Text>
 
             <form.Field name="email">
               {(field) => (
