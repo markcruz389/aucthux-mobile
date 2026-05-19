@@ -1,9 +1,10 @@
 import { Card } from "@/components/card";
+import { ErrorFallback } from "@/components/error-fallback";
 import { PostSkeletonList } from "@/components/post-skeleton-card";
 import { useSession } from "@/providers/session-provider";
 import { createPostsByUserQueryOptions } from "@/queries/post";
 import { useQuery } from "@tanstack/react-query";
-import { FlatList, Pressable, Text, View } from "react-native";
+import { FlatList, Text, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 
 export default function MyPostsScreen() {
@@ -26,19 +27,11 @@ export default function MyPostsScreen() {
         ) : isPending ? (
           <PostSkeletonList />
         ) : isError ? (
-          <View className="flex-1 items-center justify-center px-6">
-            <Text className="mb-4 text-center text-base text-red-600">
-              {error instanceof Error ? error.message : "Something went wrong"}
-            </Text>
-            <Pressable
-              onPress={() => void refetch()}
-              className="rounded-xl bg-blue-600 px-5 py-3 active:opacity-90"
-              accessibilityRole="button"
-              accessibilityLabel="Retry loading posts"
-            >
-              <Text className="font-semibold text-white">Try again</Text>
-            </Pressable>
-          </View>
+          <ErrorFallback
+            title="Couldn't load your posts"
+            error={error}
+            onRetry={() => void refetch()}
+          />
         ) : (
           <FlatList
             data={data}

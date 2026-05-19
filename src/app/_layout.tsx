@@ -7,6 +7,8 @@ import Toast from "react-native-toast-message";
 
 import "@/global.css";
 
+export { ErrorBoundary } from "@/components/error-fallback";
+
 export default function RootLayout() {
   const [queryClient] = useState(() => new QueryClient());
 
