@@ -14,9 +14,6 @@ export default function MyPostsScreen() {
     enabled: userId != null,
   });
 
-  console.log("userId", userId);
-  console.log("isPending", isPending);
-
   return (
     <SafeAreaView className="flex-1 bg-slate-50" edges={["left", "right"]}>
       <View className="flex-1">

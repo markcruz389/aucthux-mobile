@@ -54,7 +54,9 @@ export function useCreatePost() {
 
   return useMutation({
     mutationFn: createPost,
-    onSuccess: () =>
-      void queryClient.invalidateQueries({ queryKey: queryKeys.posts.all }),
+    onSuccess: (newPost) =>
+      void queryClient.invalidateQueries({
+        queryKey: queryKeys.posts.byUser(newPost.userId),
+      }),
   });
 }
